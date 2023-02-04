@@ -21,25 +21,25 @@ function verifica_atualizacoes() {
     apt update &>/dev/null
     QUANTIDADE_ATUALIZACOES=$(apt list --upgradable 2>/dev/null | wc -l)
     if [ ${QUANTIDADE_ATUALIZACOES} -gt 0 ]; then
-        echo -e "${YELLOWC} [!] Há ${QUANTIDADE_ATUALIZACOES} atualizações disponíveis! ${NC}"
+        echo -e "${YELLOWC}[!] Há ${QUANTIDADE_ATUALIZACOES} atualizações disponíveis! ${NC}"
         atualizar_sistema
     else
-        echo -e "${GREENC} [✓] Não há atualizações disponíveis! ${NC}"
+        echo -e "${GREENC}[✓] Não há atualizações disponíveis! ${NC}"
     fi
 }
 
 # Função para atualizar o sistema
 function atualizar_sistema() {
-    echo -e "${BLUEC} [2/7] Iniciando a atualização do sistema... ${NC}"
+    echo -e "${BLUEC}[2/7] Iniciando a atualização do sistema... ${NC}"
     apt update &>/dev/null && apt upgrade -y &>/dev/null && apt dist-upgrade -y &>/dev/null
     verifica_codigo_retorno
 }
 
 # Função para instalar pacotes
 function instalar_pacotes() {
-    echo -e "${BLUEC} [3/7] Iniciando a instalação dos pacotes... ${NC}"
+    echo -e "${BLUEC}[3/7] Iniciando a instalação dos pacotes... ${NC}"
     for pacote in ${PACOTES_INSTALACAO[@]}; do
-        echo -e "${YELLOWC} Instalando o pacote: ${pacote} ${NC}"
+        echo -e "${YELLOWC}[!] Instalando o pacote: ${pacote} ${NC}"
         apt install ${pacote} -y &>/dev/null
         verifica_codigo_retorno
     done
@@ -57,14 +57,14 @@ function verifica_codigo_retorno() {
 
 # Função para baixar o arquivo zip para /tmp
 function baixar_arquivos() {
-    echo -e "${BLUEC} [4/7] Iniciando o download dos arquivos... ${NC}"
+    echo -e "${BLUEC}[4/7] Iniciando o download dos arquivos... ${NC}"
     wget ${LINK_ARQUIVOS_APLICACAO} -O /tmp/arquivos.zip &>/dev/null
     verifica_codigo_retorno
 }
 
 # Função para descompactar o arquivo zip e copiar os arquivos para /var/www/html.
 function descompactar_arquivo() {
-    echo -e "${BLUEC} [5/7] Descompactando o arquivo zip... ${NC}"
+    echo -e "${BLUEC}[5/7] Descompactando o arquivo zip... ${NC}"
     # Descompacta o arquivo zip e replace se o diretório já existir
     unzip -o /tmp/arquivos.zip -d /tmp/ &>/dev/null
     verifica_codigo_retorno
@@ -75,7 +75,7 @@ function descompactar_arquivo() {
 
 # Função para reiniciar o serviço apache2
 function reiniciar_apache() {
-    echo -e "${BLUEC} [7/7] Reiniciando o serviço apache2... ${NC}"
+    echo -e "${BLUEC}[7/7] Reiniciando o serviço apache2... ${NC}"
     systemctl restart apache2 &>/dev/null || service apache2 restart &>/dev/null
     verifica_codigo_retorno
 }
