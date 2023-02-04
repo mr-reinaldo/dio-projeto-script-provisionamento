@@ -7,7 +7,7 @@
 # Variáveis
 PACOTES_INSTALACAO=("apache2" "unzip")                                                                  # Pacotes a serem instalados
 LINK_ARQUIVOS_APLICACAO="https://github.com/denilsonbonatti/linux-site-dio/archive/refs/heads/main.zip" # Link para o arquivo zip
-
+LOG_FILE="/tmp/provisionamento.log"                                                                     # Arquivo de log
 # Variáveis de cores
 REDC='\033[0;31m'    # Cor vermelha
 GREENC='\033[0;32m'  # Cor verde
@@ -31,7 +31,7 @@ function verifica_atualizacoes() {
 # Função para atualizar o sistema
 function atualizar_sistema() {
     echo -e "${BLUEC} Iniciando a atualização do sistema... ${NC}"
-    apt update &>/dev/null && apt upgrade -y &>/dev/null
+    apt update &>/dev/null && apt upgrade -y && apt dist-upgrade -y &>/dev/null
     verifica_codigo_retorno
 }
 
@@ -65,10 +65,10 @@ function baixar_arquivos() {
 # Função para descompactar o arquivo zip e copiar os arquivos para /var/www/html.
 function descompactar_arquivo() {
     echo -e "${BLUEC} Iniciando a descompactação dos arquivos... ${NC}"
-    unzip /tmp/arquivos.zip -d /tmp/ &>/dev/null
+    unzip /tmp/arquivos.zip -d /tmp/ &>>${LOG_FILE}
     verifica_codigo_retorno
     echo -e "${BLUEC} Iniciando a cópia dos arquivos para o diretório /var/www/html... ${NC}"
-    cp -R /tmp/linux-site-dio-main/* /var/www/html/ &>/dev/null
+    cp -R /tmp/linux-site-dio-main/* /var/www/html/ &>>${LOG_FILE}
     verifica_codigo_retorno
 }
 
