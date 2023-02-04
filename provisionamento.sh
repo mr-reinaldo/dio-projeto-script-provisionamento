@@ -5,8 +5,8 @@
 # Version: 1.0
 
 # Variáveis
-PACOTES_INSTALACAO=("apache2" "unzip")                                                              # Pacotes a serem instalados
-LINK_ARQUIVOS_APLICACAO="https://github.com/denilsonbonatti/linux-site/archive/refs/heads/main.zip" # Link para o arquivo zip
+PACOTES_INSTALACAO=("apache2" "unzip")                                                                  # Pacotes a serem instalados
+LINK_ARQUIVOS_APLICACAO="https://github.com/denilsonbonatti/linux-site-dio/archive/refs/heads/main.zip" # Link para o arquivo zip
 
 # Variáveis de cores
 REDC='\033[0;31m'    # Cor vermelha
@@ -31,7 +31,7 @@ function verifica_atualizacoes() {
 # Função para atualizar o sistema
 function atualizar_sistema() {
     echo -e "${BLUEC} Iniciando a atualização do sistema... ${NC}"
-    apt-get update && apt-get upgrade -y &>/dev/null
+    apt-get update &>/dev/null && apt-get upgrade -y &>/dev/null
     verifica_codigo_retorno
 }
 
