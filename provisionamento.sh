@@ -65,7 +65,7 @@ function baixar_arquivos() {
 # Função para descompactar o arquivo zip e copiar os arquivos para /var/www/html.
 function descompactar_arquivo() {
     echo -e "${BLUEC} Iniciando a descompactação dos arquivos... ${NC}"
-    unzip /tmp/main.zip -d /tmp &>/dev/null
+    unzip /tmp/arquivos.zip -d /tmp &>/dev/null
     verifica_codigo_retorno
     echo -e "${BLUEC} Iniciando a cópia dos arquivos para o diretório /var/www/html... ${NC}"
     cp -R /tmp/linux-site-main/* /var/www/html/ &>/dev/null
