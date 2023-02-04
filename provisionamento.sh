@@ -17,27 +17,27 @@ NC='\033[0m'         # Sem cor
 
 # Função para verificar a quantidade de atualizações
 function verifica_atualizacoes() {
-    echo -e "${BLUEC} Procurando por atualizações... ${NC}"
+    echo -e "${BLUEC}[1/7] Verificando a quantidade de atualizações disponíveis... ${NC}"
     apt update &>/dev/null
     QUANTIDADE_ATUALIZACOES=$(apt list --upgradable 2>/dev/null | wc -l)
     if [ ${QUANTIDADE_ATUALIZACOES} -gt 0 ]; then
-        echo -e "${YELLOWC} Quantidade de pacotes a serem atualizados: ${QUANTIDADE_ATUALIZACOES} ${NC}"
+        echo -e "${YELLOWC} [!] Há ${QUANTIDADE_ATUALIZACOES} atualizações disponíveis! ${NC}"
         atualizar_sistema
     else
-        echo -e "${GREENC} Não há atualizações disponíveis! ${NC}"
+        echo -e "${GREENC} [✓] Não há atualizações disponíveis! ${NC}"
     fi
 }
 
 # Função para atualizar o sistema
 function atualizar_sistema() {
-    echo -e "${BLUEC} Iniciando a atualização do sistema... ${NC}"
-    apt update &>/dev/null && apt upgrade -y && apt dist-upgrade -y &>/dev/null
+    echo -e "${BLUEC} [2/7] Iniciando a atualização do sistema... ${NC}"
+    apt update &>/dev/null && apt upgrade -y &>/dev/null && apt dist-upgrade -y &>/dev/null
     verifica_codigo_retorno
 }
 
 # Função para instalar pacotes
 function instalar_pacotes() {
-    echo -e "${BLUEC} Iniciando a instalação dos pacotes... ${NC}"
+    echo -e "${BLUEC} [3/7] Iniciando a instalação dos pacotes... ${NC}"
     for pacote in ${PACOTES_INSTALACAO[@]}; do
         echo -e "${YELLOWC} Instalando o pacote: ${pacote} ${NC}"
         apt install ${pacote} -y &>/dev/null
@@ -48,34 +48,35 @@ function instalar_pacotes() {
 # Função de verificação de codigo de retorno
 function verifica_codigo_retorno() {
     if [ $? -eq 0 ]; then
-        echo -e "${GREENC} Processo concluído com sucesso! ${NC}"
+        echo -e "${GREENC}[✓] Processo concluído com sucesso! ${NC}"
     else
-        echo -e "${REDC} Ocorreu um erro no processo! ${NC}"
+        echo -e "${REDC}[x] Ocorreu um erro no processo! ${NC}"
         exit 1
     fi
 }
 
 # Função para baixar o arquivo zip para /tmp
 function baixar_arquivos() {
-    echo -e "${BLUEC} Iniciando o download dos arquivos da aplicação... ${NC}"
+    echo -e "${BLUEC} [4/7] Iniciando o download dos arquivos... ${NC}"
     wget ${LINK_ARQUIVOS_APLICACAO} -O /tmp/arquivos.zip &>/dev/null
     verifica_codigo_retorno
 }
 
 # Função para descompactar o arquivo zip e copiar os arquivos para /var/www/html.
 function descompactar_arquivo() {
-    echo -e "${BLUEC} Iniciando a descompactação dos arquivos... ${NC}"
-    unzip /tmp/arquivos.zip -d /tmp/ &>>${LOG_FILE}
+    echo -e "${BLUEC} [5/7] Descompactando o arquivo zip... ${NC}"
+    # Descompacta o arquivo zip e replace se o diretório já existir
+    unzip -o /tmp/arquivos.zip -d /tmp/ &>/dev/null
     verifica_codigo_retorno
-    echo -e "${BLUEC} Iniciando a cópia dos arquivos para o diretório /var/www/html... ${NC}"
+    echo -e "${BLUEC} [6/7] Copiando os arquivos para /var/www/html... ${NC}"
     cp -R /tmp/linux-site-dio-main/* /var/www/html/ &>>${LOG_FILE}
     verifica_codigo_retorno
 }
 
 # Função para reiniciar o serviço apache2
 function reiniciar_apache() {
-    echo -e "${BLUEC} Reiniciando o serviço apache2... ${NC}"
-    systemctl restart apache2 &>/dev/null
+    echo -e "${BLUEC} [7/7] Reiniciando o serviço apache2... ${NC}"
+    systemctl restart apache2 &>/dev/null || service apache2 restart &>/dev/null
     verifica_codigo_retorno
 }
 
