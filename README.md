@@ -25,6 +25,10 @@ O projeto passado pelo professor Denilson Bonatti da DIO (Digital Innovation One
 - Executar o script.
 - `./provisionamento.sh`
 
+- Exemplo de saída.
+
+  ![image](https://user-images.githubusercontent.com/88012242/216793756-3f6ea214-ee9c-48f3-9f11-441051612ab9.png)
+
 ## Links Úteis
 
 - [Apache HTTP Server](https://httpd.apache.org/)
